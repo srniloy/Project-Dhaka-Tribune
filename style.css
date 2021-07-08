@@ -8,6 +8,9 @@
     padding: 0;
     scroll-behavior: smooth;
 }
+body{
+    width: 100%;
+}
 
 a{
     text-decoration: none;
@@ -76,17 +79,47 @@ p{
 .logo-area a img{
     width: 370px;
 }
-.top-navbar{
-    height: auto;
+/* ========s */
+.fixed-nav .top-navbar{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 20;
+    background-color: #cccccc;
 }
+.fixed-nav .top-navbar-left img{
+    display: inline-block;
+    width: 34px;
+}
+.fixed-nav .top-navbar-left i{
+    font-size: 20px;
+    padding: 2px;
+    color:#707070;
+}
+/* ===============e */
+.top-navbar{
+    width: 100%;
+}
+.top-navbar-container{
+    height: auto;
+    padding: 10px 0 0px;
+}
+/* =========================s */
+.mobile-top-nav-container{
+    display: none;
+}
+/* =========================e */
 .top-navbar-left{
-    flex: 1;
+    flex: 3;
     margin-bottom: 8px;
 }
 .top-navbar-left i{
     font-size: 20px;
     padding:5px;
     color:#707070;
+}
+.top-navbar-left img{
+    display: none;
 }
 .top-navbar-left i:nth-child(2){
     font-size: 15px;
@@ -95,7 +128,7 @@ p{
     font-size: 18px;
 }
 .top-navbar-center{
-    flex:7;
+    flex:20;
     margin-bottom: 8px;
 }
 .top-navbar-center .main-ul {
@@ -103,20 +136,20 @@ p{
 }
 .top-navbar-center .main-ul li{
     margin-left: 15px;
+    display: inline-block;
     position: relative;
     transition: .5s;
 }
 .top-navbar-center .main-ul li:hover .dropdown-ul{
     opacity: 1;
     transform: translateY(-5px);
-    z-index: 10;
     
 }
 .top-navbar-center .main-ul .main-li-a:hover{
     color: rgb(211, 12, 12);
 }
 .top-navbar-center .main-ul li .main-li-a{
-    padding-top: 8px;
+    padding: 10px 0;
     font-size: 15px;
     line-height: 30px;
     text-transform: uppercase;
@@ -131,7 +164,8 @@ p{
 .top-navbar-right{
     flex:2;
     text-align: right;
-    height: 44px;
+    margin: 0px 0 15px;
+    height: auto;
 }
 .top-navbar-right a{
     color:#000;
@@ -150,7 +184,7 @@ p{
     display: block;
     opacity: 0;
     transition: all 0.3s;
-    z-index: -10;
+    z-index: -20;
 }
 .main-ul li .dropdown-ul li{
     margin: 0;
@@ -175,7 +209,7 @@ p{
 /* ==================== Home Banner ============== */
 .home-banner{
     width: 100%;
-    height: 629px;
+    height: auto;
     background: linear-gradient(to top,rgba(0,0,0,1) 35%,rgba(0,0,0,0)) , url('img/home-bg.jpg');
 }
 .home-banner-container{
@@ -277,36 +311,31 @@ p{
 
 .latest-news-col1-medium{
     width: 100%;
+    display: flex;
 }
 .latest-news-col1-medium-col1,
 .latest-news-col1-medium-col2{
     flex: 1;
 }
 .latest-news-col1-medium-col1{
-    background-color: mistyrose;
     height: 50px;
     margin-right: 15px;
 }
 .latest-news-col1-medium-col2{
-    background-color: rgb(84, 173, 201);
     margin-left: 15px;
     height: 50px;
 }
-.medium-news-content,
 .medium-news-content{
     width: 100%;
 }
-.medium-news-content a,
 .medium-news-content a{
     text-decoration: none;
     color: #000;
 }
-.medium-news-content img,
 .medium-news-content img{
     width: 100%;
     height: 120px;
 }
-.medium-news-content p,
 .medium-news-content p{
     font-size: 14px;
     height: 42px;
@@ -316,6 +345,7 @@ p{
 
 .small-news-content{
     padding-bottom: 37px;
+    width: 100%;
 }
 .small-news-content a{
     display: flex;
@@ -366,10 +396,10 @@ p{
     height: 68px;
 }
 .just-in-content-time{
-    flex: 3;
+    flex: 5;
 }
 .just-in-content-texts{
-    flex: 8;
+    flex: 11;
     padding-right: 5px;
 }
 .just-in-content-texts a,
@@ -470,7 +500,7 @@ p{
 }
 .all-slide-items{
     width: 100%;
-    overflow: hidden;
+    overflow-x: scroll;
     display: grid;
     grid-auto-flow: column;
     grid-column-gap: 15px;
@@ -582,7 +612,7 @@ p{
 .dt-bangla-content-little-big{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     padding: 9px 4px;
     background-color: #f1f1f2;
 }
@@ -591,7 +621,8 @@ p{
 }
 .dt-bangla-content-little-big span{
     width: 48%;
-    font-size: px;
+    font-size: 17px;
+    margin-left: 5px;
 }
 
 .dt-bangla-content span{
@@ -599,12 +630,14 @@ p{
     line-height: 16px;
     width: 68%;
     text-align:left;
+    margin-left: 5px;
 }
 
 
 
 .grid-style-news-col2-in-row2{
     margin-top:20px;
+    height: auto;
 } 
 .type-btns-area ul {
     display: flex;
@@ -628,6 +661,7 @@ p{
 }
 .news-content-by-serial{
     display: flex;
+    width: 100%;
     align-items: center;
     padding: 10px 0;
     border-bottom: 2px solid #cacaca;
@@ -658,6 +692,8 @@ p{
     position: absolute;
     opacity: 0;
     transition: all 0.2s;
+    width: 100%;
+    height:auto;
 }
 .type-contents-area .type-content:first-child{
     opacity: 1;

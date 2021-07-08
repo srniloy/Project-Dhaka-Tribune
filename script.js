@@ -21,35 +21,81 @@ if(mins<10){mins = "0" + mins;}
 updateTimeText.innerHTML = ("Last update : "+hours+":"+mins+" "+ timePeriod);
 
 
+
+// ======================= Fixed Navigation bar ===========================
+
+const navStart = document.querySelector('.top-navbar');
+const topSpace = navStart.offsetTop;
+
+window.addEventListener('scroll',()=>{
+    if(window.scrollY >= topSpace){
+        document.body.classList.add('fixed-nav');
+    }else{
+        document.body.classList.remove('fixed-nav');
+    }
+});
+
+
+
+
+const videoItems = document.querySelectorAll('.video-item');
+const allSlideContainer = document.querySelector('.all-slide-items');
+
+videoScroll();
+function videoScroll(){
+    console.log(allSlideContainer.offsetWidth);
+    if(window.innerWidth <= 572){
+        videoItems.forEach((element)=>{
+            element.style.width = (allSlideContainer.offsetWidth / 2) + "px";
+        });
+    }
+}
+
+
+
+
+
+
+// ======================= Fixed Navigation bar ===========================
+
 // ===================== Video Section==========================
 
-// const videoContainer = document.querySelector('.all-video-items');
-// let mousePosition = false;
-// let mainPointOfMouse;
-// let scrollLeft;
+const videoContainer = document.querySelector('.all-slide-items');
+let mousePosition = false;
+let mainPointOfMouse;
+let scrollLeft;
 
 
-// videoContainer.addEventListener('mousedown',(e)=>{
-//     mousePosition = true;
-//     mainPointOfMouse = e.pageX - videoContainer.offsetLeft;
-//     scrollLeft = videoContainer.scrollLeft;
-// });
-// videoContainer.addEventListener('mouseup',()=>{
-//     mousePosition = false;
-// });
-// videoContainer.addEventListener('mouseleave',()=>{
-//     mousePosition = false;
+
+videoContainer.addEventListener('mousedown',(e)=>{
+    mousePosition = true;
+    mainPointOfMouse = e.pageX - videoContainer.offsetLeft;
+    scrollLeft = videoContainer.scrollLeft;
+});
+videoContainer.addEventListener('mouseup',()=>{
+    mousePosition = false;
+});
+videoContainer.addEventListener('mouseleave',()=>{
+    mousePosition = false;
     
-// });
+});
 
-// videoContainer.addEventListener('mousemove',(e)=>{
-//     if(mousePosition){
-//         e.preventDefault();
-//         const insPointOfMouse = e.pageX - videoContainer.offsetLeft;
-//         const adjMoveOfMouse = (insPointOfMouse - mainPointOfMouse)*(3/2);
-//         videoContainer.scrollLeft = scrollLeft - adjMoveOfMouse;
-//     }
-// });
+videoContainer.addEventListener('mousemove',(e)=>{
+    if(mousePosition){
+        e.preventDefault();
+        const insPointOfMouse = e.pageX - mainPointOfMouse;
+        if(insPointOfMouse < 0){
+            videoContainer.scrollLeft += (videoItems[0].offsetWidth+15);
+        }
+        else if(insPointOfMouse > 0){
+            videoContainer.scrollLeft -= (videoItems[0].offsetWidth+15);
+        }
+
+        
+    }
+});
+
+
 
 
 
@@ -77,8 +123,14 @@ typeBtn.forEach((b,j)=>{
 
 
 
+const typeContent = document.querySelector('.type-contents-area .type-content');
+const typeContentArea = document.querySelector('.type-contents-area');
 
 
+window.addEventListener('resize',()=>{
+    typeContentArea.style.height = typeContent.offsetHeight + "px";
+    videoScroll();
+});
 
 // ===================== type by button click================
 
@@ -124,6 +176,8 @@ ssSlideArea.addEventListener('mousemove',(e)=>{
 
 
 // ====================== Small Slider==================
+
+
 
 
 

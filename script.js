@@ -46,7 +46,7 @@ function videoScroll(){
     console.log(allSlideContainer.offsetWidth);
     if(window.innerWidth <= 572){
         videoItems.forEach((element)=>{
-            element.style.width = (allSlideContainer.offsetWidth / 2) + "px";
+            element.style.width = (allSlideContainer.offsetWidth / 2) - (15/2) + "px";
         });
     }
 }
@@ -96,6 +96,33 @@ videoContainer.addEventListener('mousemove',(e)=>{
 });
 
 
+videoContainer.addEventListener('touchstart',(e)=>{
+    mousePosition = true;
+    let touches = e.changedTouches;
+    mainPointOfMouse = touches[0].pageX - videoContainer.offsetLeft;
+    scrollLeft = videoContainer.scrollLeft;
+});
+videoContainer.addEventListener('touchend',()=>{
+    mousePosition = false;
+});
+videoContainer.addEventListener('touchleave',()=>{
+    mousePosition = false;
+    
+});
+
+videoContainer.addEventListener('touchmove',(e)=>{
+    if(mousePosition){
+        e.preventDefault();
+        let touches = e.changedTouches;
+        const insPointOfMouse = touches[0].pageX - mainPointOfMouse;
+        if(insPointOfMouse < 0){
+            videoContainer.scrollLeft += (videoItems[0].offsetWidth+15);
+        }
+        else if(insPointOfMouse > 0){
+            videoContainer.scrollLeft -= (videoItems[0].offsetWidth+15);
+        }
+    }
+});
 
 
 
@@ -125,6 +152,7 @@ typeBtn.forEach((b,j)=>{
 
 const typeContent = document.querySelector('.type-contents-area .type-content');
 const typeContentArea = document.querySelector('.type-contents-area');
+typeContentArea.style.height = typeContent.offsetHeight + "px";
 
 
 window.addEventListener('resize',()=>{
@@ -143,14 +171,13 @@ const ssSlide = document.querySelector('.ss-slides');
 let ssStart = false;
 let ssmainPointOfMouse;
 let ssScrollLeft;
-
+let insPointOfMouse =0;
 
 
 
 ssSlideArea.addEventListener('mousedown',(e)=>{
     ssStart = true;
     ssmainPointOfMouse = e.pageX;
-    console.log(ssmainPointOfMouse);
     ssScrollLeft = ssSlideArea.scrollLeft;
 });
 ssSlideArea.addEventListener('mouseup',()=>{
@@ -164,7 +191,36 @@ ssSlideArea.addEventListener('mouseleave',()=>{
 ssSlideArea.addEventListener('mousemove',(e)=>{
     if(ssStart){
         e.preventDefault();
-        const insPointOfMouse = e.pageX - ssmainPointOfMouse;
+        console.log(e.pageX);
+        insPointOfMouse = e.pageX - ssmainPointOfMouse;
+        if(insPointOfMouse < 0){
+            ssSlideArea.scrollLeft += ssSlideArea.offsetWidth;
+        }
+        else if(insPointOfMouse > 0){
+            ssSlideArea.scrollLeft -= ssSlideArea.offsetWidth;
+        }
+    }
+});
+
+ssSlideArea.addEventListener('touchstart',(e)=>{
+    ssStart = true;
+    let touches = e.changedTouches;
+    ssmainPointOfMouse = touches[0].pageX - ssSlideArea.offsetLeft;
+    ssScrollLeft = ssSlideArea.scrollLeft;
+});
+ssSlideArea.addEventListener('touchend',()=>{
+    ssStart = false;
+});
+ssSlideArea.addEventListener('touchleave',()=>{
+    ssStart = false;
+    
+});
+
+ssSlideArea.addEventListener('touchmove',(e)=>{
+    if(ssStart){
+        e.preventDefault();
+        let touches = e.changedTouches;
+        insPointOfMouse = touches[0].pageX - ssmainPointOfMouse;
         if(insPointOfMouse < 0){
             ssSlideArea.scrollLeft += ssSlideArea.offsetWidth;
         }
@@ -175,10 +231,9 @@ ssSlideArea.addEventListener('mousemove',(e)=>{
 });
 
 
+
+
 // ====================== Small Slider==================
-
-
-
 
 
 

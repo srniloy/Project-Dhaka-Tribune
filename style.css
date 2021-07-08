@@ -500,20 +500,23 @@ p{
 }
 .all-slide-items{
     width: 100%;
-    overflow-x: scroll;
+    overflow:hidden;
     display: grid;
     grid-auto-flow: column;
-    grid-column-gap: 15px;
     
 }
 .video-item{
     width: 172.5px;
     height: 130px;
-    overflow: hidden;
+    margin-right: 15px;
     position: relative;
     cursor: pointer;
 }
-.slider-container .video-item:last-child{
+.ps-item{
+    margin-right: 15px;
+}
+.slider-container .video-item:last-child,
+.slider-container .ps-item:last-child{
     margin-right: 0px;
 }
 .video-item img{

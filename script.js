@@ -36,6 +36,28 @@ window.addEventListener('scroll',()=>{
 });
 
 
+const navLi = document.querySelectorAll('.main-ul li.has-dropdown');
+let dropDownUl = document.querySelectorAll('.dropdown-ul');
+
+navLi.forEach((element,i) =>{
+        element.addEventListener('mouseover',()=>{
+            dropDownUl[i].style.display = "block";
+            setTimeout(()=>{
+                dropDownUl[i].style.opacity = "1";
+                dropDownUl[i].style.transform = "translateY(-"+5+"px)";
+            },100);
+        });
+        element.addEventListener('mouseleave',()=>{
+            dropDownUl[i].style.display = "none";
+            setTimeout(()=>{
+                dropDownUl[i].style.opacity = "0";
+                dropDownUl[i].style.transform = "translateY(-"+0+"px)";
+            },100);
+        });
+
+});
+
+
 
 
 const videoItems = document.querySelectorAll('.video-item');

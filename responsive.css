@@ -87,6 +87,9 @@
     .header{
         display: none;
     }
+    .top-navbar{
+        background-color: #ccc;
+    }
     .top-navbar-container{
         display: none;
     }

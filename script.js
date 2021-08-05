@@ -82,69 +82,77 @@ function videoScroll(){
 
 // ===================== Video Section==========================
 
-const videoContainer = document.querySelector('.all-slide-items');
+const videoContainer = document.querySelectorAll('.all-slide-items');
+const vc = document.querySelectorAll('.slider-container');
 let mousePosition = false;
 let mainPointOfMouse;
+let scrolledValue = 0;
+let insPointOfMouse;
 let scrollLeft;
 
-
-
-videoContainer.addEventListener('mousedown',(e)=>{
-    mousePosition = true;
-    mainPointOfMouse = e.pageX - videoContainer.offsetLeft;
-    scrollLeft = videoContainer.scrollLeft;
-});
-videoContainer.addEventListener('mouseup',()=>{
-    mousePosition = false;
-});
-videoContainer.addEventListener('mouseleave',()=>{
-    mousePosition = false;
-    
-});
-
-videoContainer.addEventListener('mousemove',(e)=>{
-    if(mousePosition){
+videoContainer.forEach((item,i)=>{
+    item.addEventListener('mousedown',(e)=>{
         e.preventDefault();
-        const insPointOfMouse = e.pageX - mainPointOfMouse;
-        if(insPointOfMouse < 0){
-            videoContainer.scrollLeft += (videoItems[0].offsetWidth+15);
-        }
-        else if(insPointOfMouse > 0){
-            videoContainer.scrollLeft -= (videoItems[0].offsetWidth+15);
-        }
+        mousePosition = true;
+        mainPointOfMouse = e.pageX - item.offsetLeft;
+        scrollLeft = item.scrollLeft;
+        console.log(mainPointOfMouse);
+    });
+    item.addEventListener('mouseup',()=>{
+        mousePosition = false;
+        scrolledValue += insPointOfMouse;
 
+    });
+    item.addEventListener('mouseleave',()=>{
+        mousePosition = false;
         
-    }
-});
-
-
-videoContainer.addEventListener('touchstart',(e)=>{
-    mousePosition = true;
-    let touches = e.changedTouches;
-    mainPointOfMouse = touches[0].pageX - videoContainer.offsetLeft;
-    scrollLeft = videoContainer.scrollLeft;
-});
-videoContainer.addEventListener('touchend',()=>{
-    mousePosition = false;
-});
-videoContainer.addEventListener('touchleave',()=>{
-    mousePosition = false;
+    });
     
+    item.addEventListener('mousemove',(e)=>{
+        e.preventDefault();
+        if(mousePosition){
+            
+            
+            insPointOfMouse = e.pageX - mainPointOfMouse;
+            console.log(insPointOfMouse);
+            item.style.transform = "translate(" + (scrolledValue+insPointOfMouse)+"px)";
+            
+
+    
+            
+        }
+    });
 });
 
-videoContainer.addEventListener('touchmove',(e)=>{
-    if(mousePosition){
-        e.preventDefault();
-        let touches = e.changedTouches;
-        const insPointOfMouse = touches[0].pageX - mainPointOfMouse;
-        if(insPointOfMouse < 0){
-            videoContainer.scrollLeft += (videoItems[0].offsetWidth+15);
-        }
-        else if(insPointOfMouse > 0){
-            videoContainer.scrollLeft -= (videoItems[0].offsetWidth+15);
-        }
-    }
-});
+
+
+// videoContainer.addEventListener('touchstart',(e)=>{
+//     mousePosition = true;
+//     let touches = e.changedTouches;
+//     mainPointOfMouse = touches[0].pageX - videoContainer.offsetLeft;
+//     scrollLeft = videoContainer.scrollLeft;
+// });
+// videoContainer.addEventListener('touchend',()=>{
+//     mousePosition = false;
+// });
+// videoContainer.addEventListener('touchleave',()=>{
+//     mousePosition = false;
+    
+// });
+
+// videoContainer.addEventListener('touchmove',(e)=>{
+//     if(mousePosition){
+//         e.preventDefault();
+//         let touches = e.changedTouches;
+//         const insPointOfMouse = touches[0].pageX - mainPointOfMouse;
+//         if(insPointOfMouse < 0){
+//             videoContainer.scrollLeft += (videoItems[0].offsetWidth+15);
+//         }
+//         else if(insPointOfMouse > 0){
+//             videoContainer.scrollLeft -= (videoItems[0].offsetWidth+15);
+//         }
+//     }
+// });
 
 
 
@@ -193,7 +201,7 @@ const ssSlide = document.querySelector('.ss-slides');
 let ssStart = false;
 let ssmainPointOfMouse;
 let ssScrollLeft;
-let insPointOfMouse =0;
+let ssInsPointOfMouse =0;
 
 
 
@@ -214,8 +222,8 @@ ssSlideArea.addEventListener('mousemove',(e)=>{
     if(ssStart){
         e.preventDefault();
         console.log(e.pageX);
-        insPointOfMouse = e.pageX - ssmainPointOfMouse;
-        if(insPointOfMouse < 0){
+        ssInsPointOfMouse = e.pageX - ssmainPointOfMouse;
+        if(ssInsPointOfMouse < 0){
             ssSlideArea.scrollLeft += ssSlideArea.offsetWidth;
         }
         else if(insPointOfMouse > 0){
@@ -242,11 +250,11 @@ ssSlideArea.addEventListener('touchmove',(e)=>{
     if(ssStart){
         e.preventDefault();
         let touches = e.changedTouches;
-        insPointOfMouse = touches[0].pageX - ssmainPointOfMouse;
-        if(insPointOfMouse < 0){
+        ssInsPointOfMouse = touches[0].pageX - ssmainPointOfMouse;
+        if(ssInsPointOfMouse < 0){
             ssSlideArea.scrollLeft += ssSlideArea.offsetWidth;
         }
-        else if(insPointOfMouse > 0){
+        else if(ssInsPointOfMouse > 0){
             ssSlideArea.scrollLeft -= ssSlideArea.offsetWidth;
         }
     }

@@ -474,55 +474,70 @@ p{
 .content-slider-title a i{
     margin-left: 2px;
 }
-.slider-container{
-    height: auto;
-    overflow: hidden;
-    position: relative;
+.slider-area{
     padding: 15px 0;
+    overflow: visible;
+    position: relative;
+    margin: 15px 0;
     border-top: 2px solid rgb(228, 228, 228);
 }
-.slider-container .left-btn,
-.slider-container .right-btn{
+.slider-area .left-btn,
+.slider-area .right-btn{
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    font-size: 4 353412   0px;
-    color: white;
+    font-size: 40px;
+    color: rgb(255, 255, 255);
+    background-color: #000000af;
     cursor: pointer;
 }
-.slider-container .right-btn{
-    right: 0px;
+.slider-area .right-btn{
+    right: 10px;
 }
-.slider-container .left-btn{
-    left: 0px;
+.slider-area .left-btn{
+    left: 10px;
 }
-.all-slide-items{
+.slide-container{
     width: 100%;
-    overflow:hidden;
+    height: 112px; /* border's 2px */
+    position: relative;
+    overflow: hidden;
+}
+.slide-box{
+    width: fit-content;
+    height: 100%;
+    overflow:visible;
     display: grid;
     grid-auto-flow: column;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 300ms;
+    background-color: white;
     
 }
 .video-item{
-    width: 172.5px;
-    height: 130px;
-    margin-right: 15px;
+    /* width: from js; */
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+}
+.slide-content{
+    height: 110px;
+    /* width: from js; */
     position: relative;
     cursor: pointer;
+    
 }
 .ps-item{
     margin-right: 15px;
 }
-.slider-container .video-item:last-child,
-.slider-container .ps-item:last-child{
-    margin-right: 0px;
-}
-.video-item img{
+.slide-content img{
     width: 100%;
     height: 100px;
 }
-.video-item i{
+.slide-content i{
     position: absolute;
     top: 50%;
     left: 50%;
@@ -530,16 +545,16 @@ p{
     font-size: 40px;
     transform: translate(-50%,-50%);
 }
-.video-item p{
+.slide-content p{
     background-color: rgba(19, 18, 18, 0.849);
     padding: 4px 6px;
-    height: 44.4px;
+    height: 40px;
     width: 100%;
     color: #fff;
     font-size: 12px;
     letter-spacing: .5px;
     position: absolute;
-    bottom: 10px;
+    top: 70px;
 }
 
 

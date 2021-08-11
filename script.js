@@ -86,16 +86,17 @@ navLi.forEach((element,i) =>{
 
 
 const sliderArea = document.querySelector('.slider-area');
-const leftBtn = document.querySelector('.slider-area .left-btn');
-const rightBtn = document.querySelector('.slider-area .right-btn');
 const sliderContainer = document.querySelector('.slide-container');
 const slideBox = document.querySelector('.slide-box');
-
 const slides = document.querySelectorAll('.video-item');
+const leftBtn = document.querySelector('.slider-area .left-btn');
+const rightBtn = document.querySelector('.slider-area .right-btn');
+let displaySlide = 6;
+let navigationDots = false;
+
 const slideContents = document.querySelectorAll('.slide-content');
 const widthOfSliderArea = sliderArea.offsetWidth;
 const numberOfTotalSlides = slides.length;
-let displaySlide = 6;
 
 // Fixing widths ------>
 
@@ -108,293 +109,383 @@ slides.forEach((element,i) =>{
 
 
 
-// cloning of sliderBox ----->
-const cloneSlideBox = slideBox.cloneNode(true);
+const m = new sliderCode(sliderArea,sliderContainer,slideBox,slides,leftBtn,rightBtn,displaySlide,navigationDots);
+m.WorkOfSliding();
 
-cloneSlideBox.style.left = "-" + slideBox.offsetWidth + "px";
-cloneSlideBox.classList.add("cloned-slide-box");
-sliderContainer.appendChild(cloneSlideBox);
-
-// <-----------------
-
-
-
-
-
-
-
-
-
-
-
-const leftWidthOfSlider = sliderArea.offsetLeft;
-let clickedPositionXOfSlider;
-let instantMovingPositionXOfSlider;
-let dragedValueXOfSlider;
-let translatedValueXOfSlider = 0;
-let instantTranslatedValueXOfSlider;
-const XForChangesInSlideBox = (slides[0].offsetWidth *6.5); // 740
-const XForChangesInCloneSlideBox = (slides[0].offsetWidth * 6.5) + slideBox.offsetWidth; // 2960
-let cloneSliderPosition;
-let SliderPosition;
-
-let isdraging;
-let isDragingLeft;
-let isUp = true;
-let isLeave = true;
-let isStartPositioningSlideBox;
-let isStartPositioningcloneSlideBox;
-
-let doForSlideBoxRight;
-let doForCloneSlideBoxRight;
-let doForSlideBoxLeft;
-let doForCloneSlideBoxLeft;
-let slideNumberByButton = 0;
-
-
-//let autoAnimatingTimeInterval = setInterval(() => {rightBtnAction();}, 1500);
 
 
 sliderArea.addEventListener('mouseleave',()=>{
-    isdraging = false;
-    isLeave = true;
-    if(isUp == false){
-        upOrLeaveAction();
-        isUp = true;
-    }
-    //autoAnimatingTimeInterval = setInterval(() => {rightBtnAction();},1500);
+    m.mouseLeave();
 });
 sliderArea.addEventListener('mouseover',()=>{
-    //clearInterval(autoAnimatingTimeInterval);
+    m.mouseOver();
 });
 sliderArea.addEventListener('mouseup',()=>{
-    isdraging = false;
-    if(isLeave == false){upOrLeaveAction(); isLeave = true;}
-    isUp = true;
+    m.mouseUp();
     
 });
 sliderArea.addEventListener('mousedown',(e)=>{
     e.preventDefault();
-   isdraging = true;
-   clickedPositionXOfSlider = e.pageX - leftWidthOfSlider;
+    m.mouseDown(e);
 });
 //window.addEventListener('dragenter')
 sliderArea.addEventListener('mousemove',(e)=>{
     e.preventDefault();
-    if(isdraging){
-        
-        dragedValueXOfSlider = (e.pageX-leftWidthOfSlider) - clickedPositionXOfSlider;
-        instantMovingPositionXOfSlider = e.pageX - leftWidthOfSlider;
-        instantTranslatedValueXOfSlider = translatedValueXOfSlider + dragedValueXOfSlider;
-        if(dragedValueXOfSlider<0){isDragingLeft = true;}
-        else if(dragedValueXOfSlider>0){isDragingLeft = false;}
-        slideBox.style.transition = `all 0ms`;
-        cloneSlideBox.style.transition = `all 0ms`;
-        AniOfSliding();
-        isUp = false;
-        isLeave = false;
-    }
+    m.mouseMove(e);
     
 });
-
-
-function upOrLeaveAction(){
-    translatedValueXOfSlider += dragedValueXOfSlider;
-
-    let slideNumber;
-    if(dragedValueXOfSlider<0){
-        slideNumber = Math.floor(translatedValueXOfSlider/slides[0].offsetWidth);
-    }else{
-        slideNumber = Math.ceil(translatedValueXOfSlider/slides[0].offsetWidth);
-    }
-    
-    translatedValueXOfSlider = slides[0].offsetWidth * slideNumber;
-    instantTranslatedValueXOfSlider = translatedValueXOfSlider;
-    slideNumberByButton = slideNumber;
-    setTimeout(() => {
-        slideBox.style.transition = `all 300ms`;
-        cloneSlideBox.style.transition = `all 300ms`;
-        //animationOfDots();
-        AniOfSliding();
-    }, 100);
-}
-
-
-
 
 
 rightBtn.addEventListener("click",()=>{
-    rightBtnAction();
+    m.rightBtnAction();
     
 });
 leftBtn.addEventListener("click",()=>{
-    leftBtnAction();
+    m.leftBtnAction();
     
 });
 
 
-function rightBtnAction(){
-    slideNumberByButton--;
-    translatedValueXOfSlider = slides[0].offsetWidth * slideNumberByButton;
-    instantTranslatedValueXOfSlider = translatedValueXOfSlider;
-    AniOfSliding();
-    //animationOfDots();
-}
-function leftBtnAction(){
-    slideNumberByButton++;
-    translatedValueXOfSlider = slides[0].offsetWidth * slideNumberByButton;
-    instantTranslatedValueXOfSlider = translatedValueXOfSlider;
-    AniOfSliding();
-    //animationOfDots();
-}
+
+
+
+function sliderCode(sliderArea,sliderContainer,slideBox,slides,leftBtn,rightBtn,displaySlide,navigationDots){
+    this.sliderArea = sliderArea;
+    this.sliderContainer = sliderContainer;
+    this.slideBox = slideBox;
+    this.slides = slides;
+    this.leftBtn = leftBtn;
+    this.rightBtn = rightBtn;
+    this.dots;
+    this.displaySlide = displaySlide;
+    this.cloneSlideBox;
 
 
 
 
-
-
-
-
-
-// Changing Animation of slides -------------------------->
-
-
-
-function AniOfSliding(){
+    this.leftWidthOfSlider = sliderArea.offsetLeft;
+    this.clickedPositionXOfSlider;
+    this.instantMovingPositionXOfSlider;
+    this.dragedValueXOfSlider;
+    this.translatedValueXOfSlider = 0;
+    this.instantTranslatedValueXOfSlider;
+    this.XForChangesInSlideBox = (this.slides[0].offsetWidth * (displaySlide+1));
+    this.XForChangesInCloneSlideBox = this.XForChangesInSlideBox + this.slideBox.offsetWidth;
+    this.cloneSliderPosition;
+    this.SliderPosition;
     
+    this.isdraging;
+    this.isDragingLeft;
+    this.isUp = true;
+    this.isLeave = true;
+    this.isStartPositioningSlideBox;
+    this.isStartPositioningcloneSlideBox;
     
-    // reset ->
+    this.doForSlideBoxRight;
+    this.doForCloneSlideBoxRight;
+    this.doForSlideBoxLeft;
+    this.doForCloneSlideBoxLeft;
+    this.slideNumberByButton = 0;
+    
+    this.autoAnimatingTimeInterval;
 
-    if(instantTranslatedValueXOfSlider >= (slideBox.offsetWidth * 2)){
-        translatedValueXOfSlider = 0;
-        slideNumberByButton = 0;
 
+    this.leftBtnAction = function(){
+ 
+        this.slideNumberByButton++;
+        this.translatedValueXOfSlider = this.slides[0].offsetWidth * this.slideNumberByButton;
+        this.instantTranslatedValueXOfSlider = this.translatedValueXOfSlider;
+        this.AniOfSliding();
+        if(navigationDots){
+            this.animationOfDots();
+        }
     }
-    if(instantTranslatedValueXOfSlider <= (slideBox.offsetWidth * (-2))){
-        translatedValueXOfSlider = 0;
-        slideNumberByButton = 0;
 
+
+    this.rightBtnAction = function(){
+ 
+        this.slideNumberByButton--;
+        this.translatedValueXOfSlider = this.slides[0].offsetWidth * this.slideNumberByButton;
+        this.instantTranslatedValueXOfSlider = this.translatedValueXOfSlider;
+        this.AniOfSliding();
+        if(navigationDots){
+            this.animationOfDots();
+        }
     }
 
-    // <-
 
 
-    // Right Slde Transition ->
 
-    
-    
-    if(((XForChangesInSlideBox * (-1)) <= instantTranslatedValueXOfSlider) 
-    && (0 >= instantTranslatedValueXOfSlider)){
-        doForCloneSlideBoxRight = true;
-        cloneSlideBox.style.transform = `translateX(${instantTranslatedValueXOfSlider}px)`;
+
+
+    this.mouseLeave = function(){
+        this.isdraging = false;
+        this.isLeave = true;
+        if(this.isUp == false){
+            this.upOrLeaveAction();
+            this.isUp = true;
+        }
+        // autoAnimatingTimeInterval = setInterval(() => {rightBtnAction();},1500);
     }
-    else if((XForChangesInSlideBox * (-1)) > instantTranslatedValueXOfSlider){
-
-        cloneSliderPosition = (slideBox.offsetWidth*2) + instantTranslatedValueXOfSlider;
+ 
+    this.mouseOver = function(){
+        //clearInterval(this.autoAnimatingTimeInterval);
+    }
+    this.mouseUp = function(){
+        this.isdraging = false;
+        if(this.isLeave == false){this.upOrLeaveAction(); this.isLeave = true;}
+        this.isUp = true;
+    }
+    this.mouseDown = function(e){
+ 
+        this.isdraging = true;
+        this.clickedPositionXOfSlider = e.pageX - this.leftWidthOfSlider;
+    }
+    this.mouseMove = function(e){
+        if(this.isdraging){
         
-        if(doForCloneSlideBoxRight){
-            cloneSlideBox.style.zIndex = "-1";
-            setTimeout(()=>{
-                cloneSlideBox.style.transform = `translateX(${cloneSliderPosition}px)`;
-                setTimeout(() => {
-                    cloneSlideBox.style.zIndex = "1";
-                }, 300);
-            },40);
-            doForCloneSlideBoxRight = false;
-        }else{
-            cloneSlideBox.style.transform = `translateX(${cloneSliderPosition}px)`;
-        }
-    }
-
-
-    if(((XForChangesInCloneSlideBox * (-1)) <= instantTranslatedValueXOfSlider)
-    && (0 >= instantTranslatedValueXOfSlider)){
-        slideBox.style.transform = `translateX(${instantTranslatedValueXOfSlider}px)`;
-        doForSlideBoxRight = true;
-    }
-    else if((XForChangesInCloneSlideBox * (-1)) > instantTranslatedValueXOfSlider){
-        SliderPosition = (cloneSlideBox.offsetWidth*2) + instantTranslatedValueXOfSlider;
-
-        if(doForSlideBoxRight){
-
-            slideBox.style.zIndex = "-1";
-            setTimeout(()=>{
-                slideBox.style.transform = `translateX(${SliderPosition}px)`;
-                setTimeout(() => {
-                    slideBox.style.zIndex = "1";
-                }, 300);
-            },40);
-
-
-            doForSlideBoxRight = false;
-        }else{
-            slideBox.style.transform = `translateX(${SliderPosition}px)`;
-        }
-    }
-
-
-    // <-
-
-
-
-
-    // Left Side Transition ->
-    
-
-    if(((XForChangesInSlideBox * (1.2)) >= instantTranslatedValueXOfSlider)
-    && (0 <= instantTranslatedValueXOfSlider)){
-        slideBox.style.transform = `translateX(${instantTranslatedValueXOfSlider}px)`;
-        doForSlideBoxLeft = true;
-    }
-    else if((XForChangesInSlideBox * (1.2)) < instantTranslatedValueXOfSlider){
-
-            cloneSliderPosition = (slideBox.offsetWidth*(-2)) + instantTranslatedValueXOfSlider;
-            //cloneSlideBox.style.left = `${cloneSlidePosition}px`;
-    
-            if(doForSlideBoxLeft){
-                slideBox.style.zIndex = "-1";
-            setTimeout(()=>{
-                slideBox.style.transform = `translateX(${cloneSliderPosition}px)`;
-                setTimeout(() => {
-                    slideBox.style.zIndex = "1";
-                }, 300);
-            },40);
-                doForSlideBoxLeft = false;
-            }else{
-                slideBox.style.transform = `translateX(${cloneSliderPosition}px)`;
-            }
-        }
-
-
-
-    if(((XForChangesInCloneSlideBox * (1.15)) >= instantTranslatedValueXOfSlider) 
-    && (0 <= instantTranslatedValueXOfSlider)){
-        cloneSlideBox.style.transform = `translateX(${instantTranslatedValueXOfSlider}px)`;
-        doForCloneSlideBoxLeft = true;
-    }
-    else if((XForChangesInCloneSlideBox * (1.15)) < instantTranslatedValueXOfSlider){
-        SliderPosition = (slideBox.offsetWidth*(-2)) + instantTranslatedValueXOfSlider;
+ 
         
-        if(doForCloneSlideBoxLeft){
-            cloneSlideBox.style.zIndex = "-1";
-            setTimeout(()=>{
-                cloneSlideBox.style.transform = `translateX(${SliderPosition}px)`;
-                setTimeout(() => {
-                    cloneSlideBox.style.zIndex = "1";
-                }, 300);
-            },40);
-            doForCloneSlideBoxLeft = false;
-        }else{
-            cloneSlideBox.style.transform = `translateX(${SliderPosition}px)`;
+            this.dragedValueXOfSlider = (e.pageX-this.leftWidthOfSlider) - this.clickedPositionXOfSlider;
+            this.instantMovingPositionXOfSlider = e.pageX - this.leftWidthOfSlider;
+            this.instantTranslatedValueXOfSlider = this.translatedValueXOfSlider + this.dragedValueXOfSlider;
+            if(this.dragedValueXOfSlider<0){this.isDragingLeft = true;}
+            else if(this.dragedValueXOfSlider>0){this.isDragingLeft = false;}
+            
+            this.slideBox.style.transition = `all 0ms`;
+            this.cloneSlideBox.style.transition = `all 0ms`;
+            this.AniOfSliding();
+            this.isUp = false;
+            this.isLeave = false;
         }
     }
 
-    // <---
+
+
+
+    this.WorkOfSliding = function(){
+
+       this.cloneSlideBox = this.slideBox.cloneNode(true);
+       this.cloneSlideBox.style.left = "-"+this.slideBox.offsetWidth + "px";
+       this.cloneSlideBox.classList.add("cloned-slide-box");
+       this.sliderContainer.appendChild(this.cloneSlideBox);
+
+
+       this.slideBox.style.width = (this.slides[0].offsetWidth)*this.slides.length + "px";
+       this.cloneSlideBox.style.width = (this.slides[0].offsetWidth)*this.slides.length + "px";
+       
+       
+       //this.autoAnimatingTimeInterval = setInterval(() => {this.rightBtnAction();}, 1500)
+       
+       
+       
+       
+    }
 
 
 
 
+
+
+   
+   this.animationOfDots = function(){
+       
+       this.dots.forEach(element =>{
+           element.style.backgroundColor = "#ddd";
+           element.style.transform = `scale(0.8,0.8)`;
+        });
+        let x = this.slideNumberByButton, y = this.slideNumberByButton;
+        if((this.slideNumberByButton<0) && ((this.slides.length * -2) < this.slideNumberByButton)){
+            x = x * (-1);
+            if(x>(this.slides.length-1)){x = x-this.slides.length;}
+            if(x==(this.slides.length * 2)){x = 0;console.log("here");}
+            
+            this.dots[x].style.backgroundColor = "#222";
+            this.dots[x].style.transform = `scale(1,1)`;
+        }
+        else if(this.slideNumberByButton>0){
+            y = (this.slides.length*2) - this.slideNumberByButton;
+            if(y>(this.slides.length-1)){ y=y-this.slides.length;}
+            
+            this.dots[y].style.backgroundColor = "#222";
+            this.dots[y].style.transform = `scale(1,1)`;
+        }else if(this.slideNumberByButton == 0){
+            this.dots[0].style.backgroundColor = "#222";
+            this.dots[0].style.transform = `scale(1,1)`;
+        }
+        console.log("slide Number for button: "+this.slideNumberByButton);
+        
+   }  
+   
+   
+   
+   
+   this.upOrLeaveAction = function(){
+
+       this.translatedValueXOfSlider += this.dragedValueXOfSlider;
+
+       let slideNumber;
+       if(this.dragedValueXOfSlider<0){
+           slideNumber = Math.floor(this.translatedValueXOfSlider/slides[0].offsetWidth);
+       }else{
+           slideNumber = Math.ceil(this.translatedValueXOfSlider/slides[0].offsetWidth);
+       }
+
+       console.log("real slide number: "+slideNumber);
+       this.translatedValueXOfSlider = this.slides[0].offsetWidth * slideNumber;
+       this.instantTranslatedValueXOfSlider = this.translatedValueXOfSlider;
+       this.slideNumberByButton = slideNumber;
+       setTimeout(() => {
+           this.slideBox.style.transition = `all 300ms`;
+           this.cloneSlideBox.style.transition = `all 300ms`;
+           if(navigationDots){this.animationOfDots();}
+           this.AniOfSliding();
+       }, 100);
+   }
+   
+   
+   
+   
+   
+   
+   
+   
+   // Changing Animation of slides -------------------------->
+   
+   
+   
+   this.AniOfSliding = function(){
+       
+       console.log("translated value : "+ this.instantTranslatedValueXOfSlider);
+
+      // reset ->
+      
+      if(this.instantTranslatedValueXOfSlider >= (this.slideBox.offsetWidth*2)){
+          this.translatedValueXOfSlider = 0;
+          this.slideNumberByButton = 0;
+          console.log("instant n: "+ this.slideNumberByButton);
+   
+      }
+      if(this.instantTranslatedValueXOfSlider <= (this.slideBox.offsetWidth*(-2))){
+          this.translatedValueXOfSlider = 0;
+          this.slideNumberByButton = 0;
+          
+        }
+   
+      // <-
+   
+   
+      // Right Slde Transition ->
+   
+      
+      
+      if(((this.XForChangesInSlideBox * (-1)) <= this.instantTranslatedValueXOfSlider) 
+      && (0 >= this.instantTranslatedValueXOfSlider)){
+          this.doForCloneSlideBoxRight = true;
+          this.cloneSlideBox.style.transform = `translateX(${this.instantTranslatedValueXOfSlider}px)`;
+      }
+      else if((this.XForChangesInSlideBox * (-1)) > this.instantTranslatedValueXOfSlider){
+   
+          this.cloneSliderPosition = (this.slideBox.offsetWidth*2) + this.instantTranslatedValueXOfSlider;
+          
+          if(this.doForCloneSlideBoxRight){
+              this.cloneSlideBox.style.zIndex = "-1";
+              setTimeout(()=>{
+                  this.cloneSlideBox.style.transform = `translateX(${this.cloneSliderPosition}px)`;
+                  setTimeout(() => {
+                      this.cloneSlideBox.style.zIndex = "1";
+                  }, 300);
+              },40);
+              this.doForCloneSlideBoxRight = false;
+          }else{
+              this.cloneSlideBox.style.transform = `translateX(${this.cloneSliderPosition}px)`;
+          }
+      }
+   
+   
+      if(((this.XForChangesInCloneSlideBox * (-1)) <= this.instantTranslatedValueXOfSlider)
+      && (0 >= this.instantTranslatedValueXOfSlider)){
+          this.slideBox.style.transform = `translateX(${this.instantTranslatedValueXOfSlider}px)`;
+          this.doForSlideBoxRight = true;
+      }
+      else if((this.XForChangesInCloneSlideBox * (-1)) > this.instantTranslatedValueXOfSlider){
+          this.SliderPosition = (this.cloneSlideBox.offsetWidth*2) + this.instantTranslatedValueXOfSlider;
+
+          if(this.doForSlideBoxRight){
+   
+              this.slideBox.style.zIndex = "-1";
+              setTimeout(()=>{
+                  this.slideBox.style.transform = `translateX(${this.SliderPosition}px)`;
+                  setTimeout(() => {
+                      this.slideBox.style.zIndex = "1";
+                  }, 300);
+              },40);
+   
+   
+              this.doForSlideBoxRight = false;
+          }else{
+              this.slideBox.style.transform = `translateX(${this.SliderPosition}px)`;
+          }
+      }
+   
+   
+      // <-
+   
+
+   
+
+      // Left Side Transition ->
+   
+      if(((this.XForChangesInSlideBox ) >= this.instantTranslatedValueXOfSlider)
+      && (0 <= this.instantTranslatedValueXOfSlider)){
+          this.slideBox.style.transform = `translateX(${this.instantTranslatedValueXOfSlider}px)`;
+          this.doForSlideBoxLeft = true;
+      }
+      else if((this.XForChangesInSlideBox) < this.instantTranslatedValueXOfSlider){
+
+              this.cloneSliderPosition = (this.slideBox.offsetWidth*(-2)) + this.instantTranslatedValueXOfSlider;
+              //cloneSlideBox.style.left = `${cloneSlidePosition}px`;
+      
+              if(this.doForSlideBoxLeft){
+                  this.slideBox.style.zIndex = "-1";
+              setTimeout(()=>{
+                  this.slideBox.style.transform = `translateX(${this.cloneSliderPosition}px)`;
+                  setTimeout(() => {
+                      this.slideBox.style.zIndex = "1";
+                  }, 300);
+              },40);
+                  this.doForSlideBoxLeft = false;
+              }else{
+                  this.slideBox.style.transform = `translateX(${this.cloneSliderPosition}px)`;
+              }
+          }
+   
+   
+   
+      if(((this.XForChangesInCloneSlideBox) >= this.instantTranslatedValueXOfSlider) 
+      && (0 <= this.instantTranslatedValueXOfSlider)){
+          this.cloneSlideBox.style.transform = `translateX(${this.instantTranslatedValueXOfSlider}px)`;
+          this.doForCloneSlideBoxLeft = true;
+      }
+      else if((this.XForChangesInCloneSlideBox) < this.instantTranslatedValueXOfSlider){
+          this.SliderPosition = (this.slideBox.offsetWidth*(-2)) + this.instantTranslatedValueXOfSlider;
+          
+          if(this.doForCloneSlideBoxLeft){
+              this.cloneSlideBox.style.zIndex = "-1";
+              setTimeout(()=>{
+                  this.cloneSlideBox.style.transform = `translateX(${this.SliderPosition}px)`;
+                  setTimeout(() => {
+                      this.cloneSlideBox.style.zIndex = "1";
+                  }, 300);
+              },40);
+              this.doForCloneSlideBoxLeft = false;
+        }else{
+            this.cloneSlideBox.style.transform = `translateX(${this.SliderPosition}px)`;
+          }
+      }
+   }
 }
+
 
 
 
@@ -513,14 +604,138 @@ ssSlideArea.addEventListener('touchmove',(e)=>{
 
 
 
+// Photo Story slide ------------------------------------->
 
 
 
 
+const psSliderArea = document.querySelector('.ps-slider-area');
+const psSliderContainer = document.querySelector('.ps-slide-container');
+const psSlideBox = document.querySelector('.ps-slide-box');
+const psSlides = document.querySelectorAll('.ps-slide');
+const psLeftBtn = document.querySelector('.ps-slider-area .ps-left-btn');
+const psRightBtn = document.querySelector('.ps-slider-area .ps-right-btn');
+let psDisplaySlide = 6;
+let psNavigationDots = false;
+
+const psSlideContents = document.querySelectorAll('.ps-slide-content');
+const psWidthOfSliderArea = psSliderArea.offsetWidth;
+const psNumberOfTotalSlides = psSlides.length;
 
 
 
+// Fixing widths ------>
 
+psSlides.forEach((element,i) =>{
+    element.style.width = psWidthOfSliderArea/psDisplaySlide + "px";
+    psSlideContents[i].style.width = (psWidthOfSliderArea/psDisplaySlide)-15 + "px";
+});
+
+// <-------------------
+
+
+
+let psSliding = new sliderCode(psSliderArea,psSliderContainer,psSlideBox,psSlides,psLeftBtn,psRightBtn,psDisplaySlide,psNavigationDots);
+psSliding.WorkOfSliding();
+
+
+
+psSliderArea.addEventListener('mouseleave',()=>{
+    psSliding.mouseLeave();
+});
+psSliderArea.addEventListener('mouseover',()=>{
+    psSliding.mouseOver();
+});
+psSliderArea.addEventListener('mouseup',()=>{
+    psSliding.mouseUp();
+    
+});
+psSliderArea.addEventListener('mousedown',(e)=>{
+    e.preventDefault();
+    psSliding.mouseDown(e);
+});
+//window.addEventListener('dragenter')
+psSliderArea.addEventListener('mousemove',(e)=>{
+    e.preventDefault();
+    psSliding.mouseMove(e);
+    
+});
+
+
+psRightBtn.addEventListener("click",()=>{
+    psSliding.rightBtnAction();
+    
+});
+psLeftBtn.addEventListener("click",()=>{
+    psSliding.leftBtnAction();
+    
+});
+
+
+
+// Worth Reading slide ------------------------------------->
+
+
+
+const wrSliderArea = document.querySelector('.wr-slider-area');
+const wrSliderContainer = document.querySelector('.wr-slide-container');
+const wrSlideBox = document.querySelector('.wr-slide-box');
+const wrSlides = document.querySelectorAll('.wr-slide');
+const wrLeftBtn = document.querySelector('.wr-left-btn');
+const wrRightBtn = document.querySelector('.wr-right-btn');
+let wrDisplaySlide = 4;
+let wrNavigationDots = false;
+
+const wrSlideContents = document.querySelectorAll('.wr-slide-content');
+const wrWidthOfSliderArea = sliderArea.offsetWidth;
+const wrNumberOfTotalSlides = slides.length;
+
+// Fixing widths ------>
+
+wrSlides.forEach((element,i) =>{
+    element.style.width = wrWidthOfSliderArea/wrDisplaySlide + "px";
+    wrSlideContents[i].style.width = (wrWidthOfSliderArea/wrDisplaySlide)-15 + "px";
+});
+
+// <-------------------
+
+
+
+const wrSliding = new sliderCode(wrSliderArea,wrSliderContainer,wrSlideBox,wrSlides,wrLeftBtn,wrRightBtn,wrDisplaySlide,wrNavigationDots);
+wrSliding.WorkOfSliding();
+
+
+
+wrSliderArea.addEventListener('mouseleave',()=>{
+    wrSliding.mouseLeave();
+});
+wrSliderArea.addEventListener('mouseover',()=>{
+    wrSliding.mouseOver();
+});
+wrSliderArea.addEventListener('mouseup',()=>{
+    wrSliding.mouseUp();
+    
+});
+wrSliderArea.addEventListener('mousedown',(e)=>{
+    e.preventDefault();
+    wrSliding.mouseDown(e);
+});
+//window.addEventListener('dragenter')
+wrSliderArea.addEventListener('mousemove',(e)=>{
+    e.preventDefault();
+    wrSliding.mouseMove(e);
+    
+});
+
+
+wrRightBtn.addEventListener("click",()=>{
+    wrSliding.rightBtnAction();
+    
+});
+wrLeftBtn.addEventListener("click",()=>{
+    wrSliding.leftBtnAction();
+    
+});
 
 
 

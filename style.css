@@ -530,9 +530,6 @@ p{
     cursor: pointer;
     
 }
-.ps-item{
-    margin-right: 15px;
-}
 .slide-content img{
     width: 100%;
     height: 100px;
@@ -742,22 +739,75 @@ p{
 
 
 
-
-.ps-item{
-    width: 172.5px;
-    height: auto;
+.ps-slider-area{
+    padding: 15px 0;
+    overflow: visible;
+    position: relative;
+    margin: 15px 0;
+    border-top: 2px solid rgb(228, 228, 228);
+}
+.ps-slider-area .ps-left-btn,
+.ps-slider-area .ps-right-btn{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    font-size: 40px;
+    color: rgb(255, 255, 255);
+    background-color: #000000af;
     cursor: pointer;
 }
-.slider-container .ps-item:last-child{
-    margin-right: 0px;
+.ps-slider-area .ps-right-btn{
+    right: 10px;
 }
-.ps-item img{
+.ps-slider-area .ps-left-btn{
+    left: 10px;
+}
+.ps-slide-container{
     width: 100%;
-    height: 114px;
+    height: 162px; /* border's 2px */
+    position: relative;
+    overflow: hidden;
 }
-.ps-item p{
-    padding: 4px 6px;
-    height: 44.4px;
+.ps-slide-box{
+    width: fit-content;
+    height: 100%;
+    overflow:visible;
+    display: grid;
+    grid-auto-flow: column;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 300ms;
+    background-color: white;
+    z-index: 1;
+    
+}
+.ps-slide{
+    /* width: from js; */
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+}
+.ps-slide-content{
+    height: 160px;
+    /* width: from js; */
+    position: relative;
+    cursor: pointer;
+    
+}
+
+
+
+
+
+
+.ps-slide-content img{
+    width: 100%;
+    height: 115px;
+}
+.ps-slide-content p{
+    height: 45px;
     font-size: 13px;
     letter-spacing: .5px;
 }
@@ -846,10 +896,70 @@ p{
 
 /* ================== Worth Reading ================ */
 
-.worth-reading{
-    width: 266px;
+
+.wr-slider-area{
+    padding: 15px 0;
+    overflow: visible;
+    position: relative;
+    margin: 15px 0;
+    border-top: 2px solid rgb(228, 228, 228);
 }
-.worth-reading p{
+.wr-slider-area .wr-left-btn,
+.wr-slider-area .wr-right-btn{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    font-size: 40px;
+    color: rgb(255, 255, 255);
+    background-color: #000000af;
+    cursor: pointer;
+}
+.wr-slider-area .wr-right-btn{
+    right: 10px;
+}
+.wr-slider-area .wr-left-btn{
+    left: 10px;
+}
+.wr-slide-container{
+    width: 100%;
+    height: 162px; /* border's 2px */
+    position: relative;
+    overflow: hidden;
+}
+.wr-slide-box{
+    width: fit-content;
+    height: 100%;
+    overflow:visible;
+    display: grid;
+    grid-auto-flow: column;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 300ms;
+    background-color: white;
+    z-index: 1;
+    
+}
+.wr-slide{
+    /* width: from js; */
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+}
+.wr-slide-content{
+    height: 160px;
+    /* width: from js; */
+    position: relative;
+    cursor: pointer;
+    
+}
+
+.wr-slide-content img{
+    width: 100%;
+    height: 115px;
+}
+.wr-slide-content p{
     font-size: 17px;
 }
 

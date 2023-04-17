@@ -209,7 +209,8 @@ p{
 .home-banner{
     width: 100%;
     height: auto;
-    background: linear-gradient(to top,rgba(0,0,0,1) 35%,rgba(0,0,0,0)) , url('img/home-bg.jpg');
+    /* background: linear-gradient(to top,rgba(0,0,0,1) 35%,rgba(0,0,0,0)) , url('img/home-bg.jpg'); */
+    background: linear-gradient(to top,rgba(0,0,0,1) 35%,rgba(0,0,0,0)) , url('https://github.com/srniloy/Project-Dhaka-Tribune/blob/main/img/home-bg.jpg?raw=true');
 }
 .home-banner-container{
     flex-direction: column;

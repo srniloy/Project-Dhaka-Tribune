@@ -10,6 +10,7 @@
 }
 body{
     width: 100%;
+    position: relative;
 }
 
 a{
@@ -35,6 +36,71 @@ p{
 }
 
 
+
+/* ==================== Onload Message ================ */
+
+
+.onload-msg
+{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    height: 100vh;
+    width: 100%;
+    /* filter: blur(5px); */
+    background-color: #090909e8;
+
+    z-index: 101;
+
+}
+
+.onload-msg .container
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: fit-content;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+    /* filter: blur(8px); */
+    padding: 2%;
+    border-radius: 5px;
+}
+
+.onload-msg .container h3
+{
+    color: #101010;
+    margin-bottom: 20px;
+}
+.onload-msg .container h4
+{
+    color: #101010;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.onload-msg .container p a
+{
+    text-decoration: underline;
+}
+.onload-msg .container div
+{
+    margin-top: 10px;
+    text-align: right;
+}
+.onload-msg .container button
+{
+    padding: 5px 10px;
+    width: fit-content;
+    cursor: pointer;
+}
+
+
+/* ======================= Header ======================= */
 
 
 .top-header-area{

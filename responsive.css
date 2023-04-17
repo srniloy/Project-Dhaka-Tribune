@@ -75,6 +75,11 @@
 /* =================================================== */
 
 @media(max-width:950px){
+
+    .onload-msg .container
+    {
+        width: 60%;
+    }
     .centered-items{
         display: flex;
         align-items: center;

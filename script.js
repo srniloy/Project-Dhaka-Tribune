@@ -21,6 +21,16 @@ if(mins<10){mins = "0" + mins;}
 updateTimeText.innerHTML = ("Last update : "+hours+":"+mins+" "+ timePeriod);
 
 
+// ======================= Onload Message =================
+
+const onloadContainer = document.querySelector(".onload-msg"),
+onloadContinueBtn = document.querySelector(".onload-msg button");
+
+onloadContinueBtn.onclick = ()=>{
+    onloadContainer.style.display = "none";
+}
+
+
 
 // ======================= Fixed Navigation bar ===========================
 
